@@ -2,10 +2,37 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Notifyy</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./Kalendae/build/kalendae.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" href="./styles.css"/>
   </head>
   <body>
-    <h1>Hello World!!</h1>
+    <div class="container">
+    <h1 class="notifyy"><small>Notifyy</small></h1>
+    <label for="remind-title">Reminder Title</label>
+    <input type="text" name="title" id="remind-title" class="form-control">
+
+    <div class="col-xs-6">
+    <label for="date">Date</label>
+     <div class="input-group date">
+     <input type="text" class="form-control" id="date">
+     <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+      </span>     
+    </div>
+    </div>
+
+    <div class="col-xs-6">
+    <label for="time">Time</label>
+     <div class="input-group date">
+     <input type="text" class="form-control" id="time">
+     <span class="input-group-addon">
+        <span class="glyphicon glyphicon-time"></span>
+      </span>     
+    </div>
+    </div>
+    </div> 
   </body>
 
   <script>

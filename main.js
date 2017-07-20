@@ -7,7 +7,13 @@ require("electron-reload")(__dirname)
 let window
 
 function createWindow(){
-  window = new BrowserWindow({width: 800, height: 600})
+window = new BrowserWindow({width: 500,
+    height: 650,
+    minWidth: 350,
+    maxWidth: 650,
+    minHeight: 310,
+    resizable: false
+ })
   window.loadURL(url.format({
     pathname: path.join(__dirname, "index.html"),
     protocol: "file:",
@@ -16,3 +22,13 @@ function createWindow(){
 }
 
 app.on("ready", createWindow)
+
+
+//window = new BrowserWindow({width: 800, height: 600})
+// window = new BrowserWindow({width: 500,
+//     height: 650,
+//     minWidth: 350,
+//     maxWidth: 650,
+//     minHeight: 310,
+//     resizable: false
+//  })

@@ -11,5 +11,12 @@
   "devDependencies": {
     "electron": "~1.6.2",
     "electron-reload": "^1.2.1"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "bootstrap-datepicker": "^1.7.1",
+    "jquery": "^3.2.1",
+    "kalendae": "file:kalendae",
+    "moment": "^2.18.1"
   }
 }
