@@ -6,10 +6,10 @@
   "scripts": {
     "start": "./node_modules/.bin/electron ."
   },
-
   "author": "alfred mohenu",
   "license": "ISC",
   "devDependencies": {
-    "electron": "~1.6.2"
+    "electron": "~1.6.2",
+    "electron-reload": "^1.2.1"
   }
 }
