@@ -1,0 +1,15 @@
+{
+  "name": "notifyy",
+  "version": "1.0.0",
+  "description": "a desktop notification application",
+  "main": "main.js",
+  "scripts": {
+    "start": "./node_modules/.bin/electron ."
+  },
+
+  "author": "alfred mohenu",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "~1.6.2"
+  }
+}
