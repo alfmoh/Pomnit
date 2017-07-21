@@ -10,9 +10,9 @@ function createWindow(){
 window = new BrowserWindow({width: 500,
     height: 650,
     minWidth: 350,
-    maxWidth: 650,
-    minHeight: 310,
-    resizable: false
+    // maxWidth: 650,
+    // minHeight: 310,
+    // resizable: false
  })
   window.loadURL(url.format({
     pathname: path.join(__dirname, "index.html"),
