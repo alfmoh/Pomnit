@@ -2,35 +2,114 @@ let $ = require("jquery");
 let Kalendae = require("kalendae");
 let datetimepicker = require("eonasdan-bootstrap-datetimepicker");
 let notyf = require("notyf");
+let moment = require("moment");
 
-
-new Kalendae.Input("date",{});
  
 let note = new notyf();
+
+$("#date").datetimepicker({
+    format: "L"
+})
 
 $("#time").datetimepicker({
     format: "LT"
 });
 
 
+
+function Logic () {
+    {
+        var eventIds = {};
+        var eventDateAndContent = {};
+        var arr = [];
+        var listItems = $("#event-list li");
+        if (listItems) {
+            listItems.each(function(li) {
+                var that = $(this);
+                var listArray = (Array.from($(this).text()));
+                var timeDateSlice = listArray.slice(listArray.indexOf("~")+2,listArray.length);
+                var dateSlice = timeDateSlice.slice(0,timeDateSlice.indexOf("~"));
+                var timeSlice = timeDateSlice.slice(timeDateSlice.indexOf("~")+2, timeDateSlice.length);
+                
+                var dateExtract = dateSlice.join("").trim();
+                var timeExtract = timeSlice.join("").trim();
+
+                var dateConvertToJsFormat = moment(dateExtract,"dddd, MMMM Do YYYY").format("MM/DD/YYYY");
+
+                  var datez = dateConvertToJsFormat + " " + ConvertTo24(timeExtract);
+
+                var getTime = new Date(datez).getTime();
+                var eventId = (that.attr("id"));
+               
+                eventIds[eventId.toString()] = 
+                Object.defineProperty(eventDateAndContent,getTime.toString(),{
+                    value: that.text(),
+                    writable:true,
+                    enumerable:true,
+                    configurable:true
+                });
+
+                Notify(eventIds);
+    
+            });
+        }
+    }
+}
+
+setInterval(Logic,1000);
+
+function Notify(dict) {
+    
+    if (dict) {
+        for(var item in dict){
+
+            for(var item2 in dict[item]){
+                console.log(Math.floor(Date.now()/1000))
+                console.log(+Math.floor(item2/1000));
+                if (+Math.floor(item2/1000) ==Math.floor( Date.now()/1000)) {
+                    console.log("Hurray");
+                }
+                
+            }
+        }    
+    }
+}
+
+ 
+var count = 0;
 $("#add-button").on("click", ()=>{
     let eventTitle = $("#event-title").val();
     let date = $("#date"). val();
     let time = $("#time").val();
     let dateTime = date + " "+ ConvertTo24(time);
-    console.log(ConvertTo24(time))
+
     let dateConvert = new Date(dateTime).getTime()
-        console.log(dateConvert)
 
 
 
-    if (eventTitle.trim() !== "") {
-     $("#event-list").append("<li class='list-group-item'>"+eventTitle +"</li>") 
+
+function GetListValues(){
+    if (($("#event-list").length !==0)) {
+
+
+    }else{return;}
+}
+
+    if (eventTitle.trim() !== "" && !eventTitle.includes("~")) {
+     $("#event-list").append("<li class='list-group-item' id ='list-item" + (count++) + "'"+ ">"
+     +eventTitle + ' -  Date & Time ~ '+ moment(date).format("dddd, MMMM Do YYYY") + ' ~ ' + time + "</li>") 
+
        note.confirm("Added")
-    }  
+
+    } 
+    else if(eventTitle.includes("~")){
+        note.alert("Please '~' isn't allowed");
+        return;
+    }
+    
     else{
         
-        //note.alert("Hey, you left something out")
+        note.alert("Please fill all boxes");
     }
 
 });
