@@ -30,7 +30,7 @@ function Logic () {
                 var timeDateSlice = listArray.slice(listArray.indexOf("~")+2,listArray.length);
                 var dateSlice = timeDateSlice.slice(0,timeDateSlice.indexOf("~"));
                 var timeSlice = timeDateSlice.slice(timeDateSlice.indexOf("~")+2, timeDateSlice.length);
-                
+
                 var dateExtract = dateSlice.join("").trim();
                 var timeExtract = timeSlice.join("").trim();
 
@@ -64,13 +64,14 @@ function Notify(dict) {
         for(var item in dict){
 
             for(var item2 in dict[item]){
-                console.log(Math.floor(Date.now()/1000))
-                console.log(+Math.floor(item2/1000));
+
                 if (+Math.floor(item2/1000) ==Math.floor( Date.now()/1000)) {
                     console.log("Hurray");
+                    return;
                 }
                 
             }
+            return;
         }    
     }
 }
@@ -95,21 +96,21 @@ function GetListValues(){
     }else{return;}
 }
 
-    if (eventTitle.trim() !== "" && !eventTitle.includes("~")) {
+    if ((eventTitle.trim() && date && time) !== ""  && !eventTitle.includes("~")) {
      $("#event-list").append("<li class='list-group-item' id ='list-item" + (count++) + "'"+ ">"
      +eventTitle + ' -  Date & Time ~ '+ moment(date).format("dddd, MMMM Do YYYY") + ' ~ ' + time + "</li>") 
 
-       note.confirm("Added")
+       note.confirm("+Added")
 
     } 
     else if(eventTitle.includes("~")){
-        note.alert("Please '~' isn't allowed");
+        note.alert("Oops! '~' isn't allowed");
         return;
     }
     
     else{
         
-        note.alert("Please fill all boxes");
+        note.alert("Oops! Please fill all boxes");
     }
 
 });
