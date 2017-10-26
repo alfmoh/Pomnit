@@ -19,7 +19,7 @@ $("#time").datetimepicker({
 
 function Logic () {
     {
-        var eventIds = {};
+        let eventObjects = {};
         var eventDateAndContent = {};
         var arr = [];
         var listItems = $("#event-list li");
@@ -41,7 +41,7 @@ function Logic () {
                 var getTime = new Date(datez).getTime();
                 var eventId = (that.attr("id"));
                
-                eventIds[eventId.toString()] = 
+                eventObjects[eventId.toString()] = 
                 Object.defineProperty(eventDateAndContent,getTime.toString(),{
                     value: that.text(),
                     writable:true,
@@ -49,7 +49,7 @@ function Logic () {
                     configurable:true
                 });
 
-                Notify(eventIds);
+                Notify(eventObjects);
     
             });
         }
@@ -58,20 +58,20 @@ function Logic () {
 
 setInterval(Logic,1000);
 
-function Notify(dict) {
-    
-    if (dict) {
-        for(var item in dict){
+function Notify(eventObjects) {
 
-            for(var item2 in dict[item]){
+    if (eventObjects) {
+        for(var item in eventObjects){
+
+            for(var item2 in eventObjects[item]){
 
                 if (+Math.floor(item2/1000) ==Math.floor( Date.now()/1000)) {
-                    console.log("Hurray");
+
+                    console.log((eventObjects[item])[item2]);
                     return;
                 }
                 
             }
-            return;
         }    
     }
 }
@@ -100,7 +100,7 @@ function GetListValues(){
      $("#event-list").append("<li class='list-group-item' id ='list-item" + (count++) + "'"+ ">"
      +eventTitle + ' -  Date & Time ~ '+ moment(date).format("dddd, MMMM Do YYYY") + ' ~ ' + time + "</li>") 
 
-       note.confirm("+Added")
+       note.confirm("&nbspAdded")
 
     } 
     else if(eventTitle.includes("~")){
