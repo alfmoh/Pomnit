@@ -1,22 +1,35 @@
 let $ = require("jquery");
-let Kalendae = require("kalendae");
 let datetimepicker = require("eonasdan-bootstrap-datetimepicker");
 let notyf = require("notyf");
 let moment = require("moment");
 let notifier = require("node-notifier");
+const { dialog } = require("electron").remote;
+let fs = require("fs");
+const remote = require("electron").remote;
+
+
+var eventData = remote.getGlobal("eventData");
+
+$("#date").datetimepicker({ format: "L" })
+
+$("#time").datetimepicker({ format: "LT" });
+
+var dataFromDb = (function thisIiffe() {
+    eventData.find({}).sort({ timeStamp: 1 }).exec((err, docs) => {
+        docs.forEach((item, index) => {
+
+            $("#event-list").append("<li class='list-group-item' id ='list-item" + (index++) + "'" + ">"
+                + "<strong>" + item.event + "</strong>" + "</strong>" + ' -  <small>Date & Time ~ </small> ' +
+                "<strong>" + moment(item.date).format("dddd, MMMM Do YYYY") + "</strong>" +
+                ' ~ ' + "<strong><i>" + item.time + "</i></strong>" + "</li>")
+
+        })
+    })
+    return thisIiffe;
+}())
 
 
 let note = new notyf();
-
-$("#date").datetimepicker({
-    format: "L"
-})
-
-$("#time").datetimepicker({
-    format: "LT"
-});
-
-
 
 function Logic() {
     {
@@ -84,31 +97,41 @@ function Notify(eventObjects) {
     }
 }
 
+let eventFromDb;
+let count = 0;
+$("#add-button").on("click", (e) => {
 
-var count = 0;
-$("#add-button").on("click", () => {
+
     let eventTitle = $("#event-title").val();
     let date = $("#date").val();
     let time = $("#time").val();
     let dateTime = date + " " + ConvertTo24(time);
+    let timeStamp = new Date(moment(`${date + ' ' + time}`).format("LLL")).getTime();
 
     let dateConvert = new Date(dateTime).getTime()
 
-
-
-
-    function GetListValues() {
-        if (($("#event-list").length !== 0)) {
-
-
-        } else { return; }
+    let dateTimeObject = {
+        event: eventTitle,
+        date: date,
+        time: time,
+        timeStamp: timeStamp
     }
 
+    let dateTimeArray = [];
+    dateTimeArray.push(dateTimeObject);
+
+
     if ((eventTitle.trim() && date && time) !== "" && !eventTitle.includes("~")) {
-        $("#event-list").append("<li class='list-group-item' id ='list-item" + (count++) + "'" + ">"
-            + "<strong>" + eventTitle + "</strong>" + ' -  <small>Date & Time ~ </small> ' +
-            "<strong>"+ moment(date).format("dddd, MMMM Do YYYY") + "</strong>" +
-             ' ~ ' + "<strong><i>"+ time + "</i></strong>" + "</li>")
+
+        $("#event-list").empty();
+
+        eventData.insert(dateTimeArray, function (err, docs) {
+            docs.forEach(function (d) {
+                eventFromDb = d.event;
+            });
+        });
+
+        dataFromDb();
 
         note.confirm("&nbsp&#8227&nbspAdded")
 
@@ -124,6 +147,7 @@ $("#add-button").on("click", () => {
     }
 
 });
+
 
 function ConvertTo24(time) {
     let timeToArr = Array.from(time);

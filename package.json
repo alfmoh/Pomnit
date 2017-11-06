@@ -19,6 +19,7 @@
     "jquery": "^3.2.1",
     "kalendae": "file:kalendae",
     "moment": "^2.18.1",
+    "nedb": "^1.8.0",
     "node-notifier": "^5.1.2",
     "notyf": "^2.0.1"
   }

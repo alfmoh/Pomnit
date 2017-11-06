@@ -2,6 +2,13 @@ const {BrowserWindow, app} = require("electron")
 const path = require("path")
 const url = require("url")
 
+var Datastore = require('nedb');  
+var eventData = new Datastore({
+     filename: "C:/Users/alfred/Desktop/NeDB.db",
+     autoload: true
+});
+global.eventData = eventData;
+
 require("electron-reload")(__dirname)
 
 let window
