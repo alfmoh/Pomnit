@@ -4,3 +4,7 @@ body{
 .notifyy{
     text-align: center;    
 }
+
+.btn-danger {
+    float: right;
+}

@@ -14,20 +14,35 @@ $("#date").datetimepicker({ format: "L" })
 
 $("#time").datetimepicker({ format: "LT" });
 
+
+$(".list-group").on('mouseenter','li',function(){
+    $(this).append("<a class='btn btn-danger btn-sm'>Delete</a>")
+})
+$(".list-group").on('mouseleave','li',function(){
+    $(".btn-danger").remove();
+})
+
 var dataFromDb = (function thisIiffe() {
     eventData.find({}).sort({ timeStamp: 1 }).exec((err, docs) => {
         docs.forEach((item, index) => {
 
-            $("#event-list").append("<li class='list-group-item' id ='list-item" + (index++) + "'" + ">"
-                + "<strong>" + item.event + "</strong>" + "</strong>" + ' -  <small>Date & Time ~ </small> ' +
-                "<strong>" + moment(item.date).format("dddd, MMMM Do YYYY") + "</strong>" +
-                ' ~ ' + "<strong><i>" + item.time + "</i></strong>" + "</li>")
+            $("#event-list").append("<li class='list-group-item' id ='" + (item._id) + "'" + ">"
+                + "<strong>" + item.event + "</strong>" + "</strong>" + ' ~ ' +
+                 moment(item.date).format("dddd, MMMM Do YYYY")  +
+                ' ~ ' + "<strong><i>" + item.time + "</i></strong>" +"</li>")                
 
+        })
+
+        $(".list-group").on('click','li',function(){
+            let listId = $(this).attr("id");
+            eventData.remove({_id: listId}, {}, function(err, numRemoved) {
+                console.log(numRemoved)
+            })
+            $("#" +listId).remove();
         })
     })
     return thisIiffe;
 }())
-
 
 let note = new notyf();
 
@@ -62,7 +77,6 @@ function Logic() {
                         enumerable: true,
                         configurable: true
                     });
-
                 Notify(eventObjects);
 
             });
@@ -76,12 +90,11 @@ function Notify(eventObjects) {
 
     if (eventObjects) {
         for (var item in eventObjects) {
-
             for (var item2 in eventObjects[item]) {
-
+                
                 if (+Math.floor(item2 / 1000) == Math.floor(Date.now() / 1000)) {
 
-                    console.log((eventObjects[item])[item2]);
+                    //console.log((eventObjects[item])[item2]);
 
                     notifier.notify({
                         title: "Notifyy",
@@ -145,6 +158,10 @@ $("#add-button").on("click", (e) => {
 
         note.alert("Oops! Please fill all boxes");
     }
+
+    $("#event-title").val("");
+    $("#date").val("")
+    $("#time").val("");
 
 });
 
