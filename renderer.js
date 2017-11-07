@@ -3,44 +3,66 @@ let datetimepicker = require("eonasdan-bootstrap-datetimepicker");
 let notyf = require("notyf");
 let moment = require("moment");
 let notifier = require("node-notifier");
-const { dialog } = require("electron").remote;
+const {
+    dialog
+} = require("electron").remote;
 let fs = require("fs");
 const remote = require("electron").remote;
 
 
 var eventData = remote.getGlobal("eventData");
 
-$("#date").datetimepicker({ format: "L" })
-
-$("#time").datetimepicker({ format: "LT" });
-
-
-$(".list-group").on('mouseenter','li',function(){
-    $(this).append("<a class='btn btn-danger btn-sm'>Delete</a>")
+$("#date").datetimepicker({
+    format: "L"
 })
-$(".list-group").on('mouseleave','li',function(){
-    $(".btn-danger").remove();
-})
+
+$("#time").datetimepicker({
+    format: "LT"
+});
+
 
 var dataFromDb = (function thisIiffe() {
-    eventData.find({}).sort({ timeStamp: 1 }).exec((err, docs) => {
+    eventData.find({}).sort({
+        timeStamp: 1
+    }).exec((err, docs) => {
         docs.forEach((item, index) => {
 
-            $("#event-list").append("<li class='list-group-item' id ='" + (item._id) + "'" + ">"
-                + "<strong>" + item.event + "</strong>" + "</strong>" + ' ~ ' +
-                 moment(item.date).format("dddd, MMMM Do YYYY")  +
-                ' ~ ' + "<strong><i>" + item.time + "</i></strong>" +"</li>")                
+            $("#event-list").append(
+
+                "<a class='btn btn-danger btn-sm list-group-item-btn " +
+                (item._id) + "'" + " id = '" + (item._id) + "'" +
+                ">Delete</a>" +
+                "<li class='list-group-item " + (item._id) + "'" +
+                " id = '" + (item._id) + "'" + ">" +
+                "<strong>" + item.event + "</strong>" + "</strong>" + ' ~ ' +
+                moment(item.date).format("dddd, MMMM Do YYYY") +
+                ' ~ ' + "<strong><i>" + item.time + "</i></strong>" + "</li>"
+            )
 
         })
 
-        $(".list-group").on('click','li',function(){
+        $(".list-group-item-btn").click(function () {
             let listId = $(this).attr("id");
-            eventData.remove({_id: listId}, {}, function(err, numRemoved) {
-                console.log(numRemoved)
+
+            $(("." + listId)).fadeOut("slow", function () {
+                $(this).remove();
+                eventData.remove({ _id: listId }, {}, function (err, numRemoved) {
+                })
             })
-            $("#" +listId).remove();
+        })
+
+        $(".list-group-item").on('click', function () {
+
+            let slidingValue = $(this).css("right") === '100px' ? 0 : '100px';
+
+            $(this).animate({
+                right: slidingValue,
+
+            }, 600)
         })
     })
+
+    // if ($('#event-list li').length === 0) {$("#event-list").append("<p id='empty-list'>Your event list is empty</p>")}
     return thisIiffe;
 }())
 
@@ -91,7 +113,7 @@ function Notify(eventObjects) {
     if (eventObjects) {
         for (var item in eventObjects) {
             for (var item2 in eventObjects[item]) {
-                
+
                 if (+Math.floor(item2 / 1000) == Math.floor(Date.now() / 1000)) {
 
                     //console.log((eventObjects[item])[item2]);
@@ -148,13 +170,10 @@ $("#add-button").on("click", (e) => {
 
         note.confirm("&nbsp&#8227&nbspAdded")
 
-    }
-    else if (eventTitle.includes("~")) {
+    } else if (eventTitle.includes("~")) {
         note.alert("Oops! '~' isn't allowed");
         return;
-    }
-
-    else {
+    } else {
 
         note.alert("Oops! Please fill all boxes");
     }

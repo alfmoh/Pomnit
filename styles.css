@@ -8,3 +8,13 @@ body{
 .btn-danger {
     float: right;
 }
+.list-group-item {
+    cursor: pointer;
+}
+
+#empty-list {
+    text-align: center;
+    padding-top: 50px;
+    font-weight: bold;
+    color: grey;
+}
