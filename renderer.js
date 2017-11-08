@@ -13,11 +13,21 @@ const remote = require("electron").remote;
 var eventData = remote.getGlobal("eventData");
 
 $("#date").datetimepicker({
-    format: "L"
+    format: "L",
+    minDate: Date.now(),
+    defaultDate: Date.now(),
+    showTodayButton: true,
+    showClose: true,
+    showClear: true
 })
 
 $("#time").datetimepicker({
-    format: "LT"
+    format: "LT",
+    defaultDate: new Date().getTime(),
+    showTodayButton: true,
+    showClose: true,
+    showClear: true,
+    toolbarPlacement: 'bottom'
 });
 
 
@@ -179,8 +189,6 @@ $("#add-button").on("click", (e) => {
     }
 
     $("#event-title").val("");
-    $("#date").val("")
-    $("#time").val("");
 
 });
 
