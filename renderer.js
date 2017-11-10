@@ -51,25 +51,7 @@ var dataFromDb = (function thisIiffe() {
 
         })
 
-        $(".list-group-item-btn").click(function () {
-            let listId = $(this).attr("id");
 
-            $(("." + listId)).fadeOut("slow", function () {
-                $(this).remove();
-                eventData.remove({ _id: listId }, {}, function (err, numRemoved) {
-                })
-            })
-        })
-
-        $(".list-group-item").on('click', function () {
-
-            let slidingValue = $(this).css("right") === '100px' ? 0 : '100px';
-
-            $(this).animate({
-                right: slidingValue,
-
-            }, 600)
-        })
     })
 
     // if ($('#event-list li').length === 0) {$("#event-list").append("<p id='empty-list'>Your event list is empty</p>")}
@@ -168,15 +150,32 @@ $("#add-button").on("click", (e) => {
 
     if ((eventTitle.trim() && date && time) !== "" && !eventTitle.includes("~")) {
 
-        $("#event-list").empty();
 
         eventData.insert(dateTimeArray, function (err, docs) {
+
+
+            let listing = (
+                "<a class='btn btn-danger btn-sm list-group-item-btn " +
+                (docs['0']._id) + "'" + " id = '" + (docs['0']._id) + "'" +
+                ">Delete</a>" +
+                "<li class='list-group-item " + (docs['0']._id) + "'" +
+                " id = '" + (docs['0']._id) + "'" + ">" +
+                "<strong>" + docs['0'].event + "</strong>" + "</strong>" + ' ~ ' +
+                moment(docs['0'].date).format("dddd, MMMM Do YYYY") +
+                ' ~ ' + "<strong><i>" + docs['0'].time + "</i></strong>" + "</li>"
+            )
+
+            $("<div />", {
+                class: "",
+                html: listing
+            }).hide().prependTo("#event-list").fadeIn();
+
+
+
             docs.forEach(function (d) {
                 eventFromDb = d.event;
             });
         });
-
-        dataFromDb();
 
         note.confirm("&nbsp&#8227&nbspAdded")
 
@@ -192,6 +191,26 @@ $("#add-button").on("click", (e) => {
 
 });
 
+$("#event-list").on('click', "li", function () {
+
+    let slidingValue = $(this).css("right") === '100px' ? 0 : '100px';
+
+    $(this).animate({
+        right: slidingValue,
+
+    }, 600)
+})
+
+
+$("#event-list").on("click", "a", function () {
+    let listId = $(this).attr("id");
+
+    $(("." + listId)).fadeOut("slow", function () {
+        $(this).remove();
+        eventData.remove({ _id: listId }, {}, function (err, numRemoved) {
+        })
+    })
+})
 
 function ConvertTo24(time) {
     let timeToArr = Array.from(time);
