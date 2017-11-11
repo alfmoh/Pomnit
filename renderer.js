@@ -62,39 +62,21 @@ let note = new notyf();
 
 function Logic() {
     {
-        let eventObjects = {};
-        var eventDateAndContent = {};
-        var arr = [];
-        var listItems = $("#event-list li");
-        if (listItems) {
-            listItems.each(function (li) {
-                var that = $(this);
-                var listArray = (Array.from($(this).text()));
-                var timeDateSlice = listArray.slice(listArray.indexOf("~") + 2, listArray.length);
-                var dateSlice = timeDateSlice.slice(0, timeDateSlice.indexOf("~"));
-                var timeSlice = timeDateSlice.slice(timeDateSlice.indexOf("~") + 2, timeDateSlice.length);
 
-                var dateExtract = dateSlice.join("").trim();
-                var timeExtract = timeSlice.join("").trim();
+        eventData.find({}, function (err, docs) {
+            docs.forEach(function (item, index) {
+                let dateAndTimeExtractAndConvert = new Date(item.date + " " + ConvertTo24(item.time)).getTime();
 
-                var dateConvertToJsFormat = moment(dateExtract, "dddd, MMMM Do YYYY").format("MM/DD/YYYY");
+                let eventObject = {
+                    id: item._id,
+                    event: item.event,
+                    dateDue: dateAndTimeExtractAndConvert
+                }
 
-                var datez = dateConvertToJsFormat + " " + ConvertTo24(timeExtract);
 
-                var getTime = new Date(datez).getTime();
-                var eventId = (that.attr("id"));
-
-                eventObjects[eventId.toString()] =
-                    Object.defineProperty(eventDateAndContent, getTime.toString(), {
-                        value: that.text(),
-                        writable: true,
-                        enumerable: true,
-                        configurable: true
-                    });
-                Notify(eventObjects);
-
-            });
-        }
+                Notify(eventObject);
+            })
+        });
     }
 }
 
@@ -102,25 +84,25 @@ setInterval(Logic, 1000);
 
 function Notify(eventObjects) {
 
-    if (eventObjects) {
-        for (var item in eventObjects) {
-            for (var item2 in eventObjects[item]) {
+    if (+Math.floor(eventObjects.dateDue / 1000) === Math.floor(Date.now() / 1000)) {
 
-                if (+Math.floor(item2 / 1000) == Math.floor(Date.now() / 1000)) {
 
-                    //console.log((eventObjects[item])[item2]);
+        let listItems = $("#event-list li");
+        let eventFromUIList = $("#event-list").find("." + eventObjects.id);
 
-                    notifier.notify({
-                        title: "Notifyy",
-                        message: (eventObjects[item])[item2],
-                        wait: true
-                    })
+        eventFromUIList.fadeOut(500, function () {
+            eventFromUIList.remove()
+        });
 
-                    return;
-                }
+        notifier.notify({
+            title: "Notifyy",
+            message: (eventObjects.event),
+            wait: true
+        })
 
-            }
-        }
+        eventData.remove({ _id: eventObjects.id }, function (err, numberRemoved) {
+        });
+
     }
 }
 
