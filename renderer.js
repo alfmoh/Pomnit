@@ -3,6 +3,13 @@ let datetimepicker = require("eonasdan-bootstrap-datetimepicker");
 let notyf = require("notyf");
 let moment = require("moment");
 let notifier = require("node-notifier");
+let Dialogs = require("dialogs");
+
+var dialogs = Dialogs({
+    cancel: 'No',
+    ok: 'Yes'
+})
+
 const {
     dialog
 } = require("electron").remote;
@@ -31,6 +38,22 @@ $("#time").datetimepicker({
 });
 
 
+$("#refresh").click(()=>{
+    $("#event-list").empty();
+    dataFromDb();
+})
+
+$("#clear-all").click(()=>{
+    dialogs.confirm("Are you sure you want to delete all your events?", function(ok){
+        if(!ok) return;
+
+        $("#event-list").empty();
+        eventData.remove({}, { multi: true }, function (err, numRemoved) {
+        });
+    })
+})
+
+
 var dataFromDb = (function thisIiffe() {
     eventData.find({}).sort({
         timeStamp: 1
@@ -39,14 +62,7 @@ var dataFromDb = (function thisIiffe() {
 
             $("#event-list").append(
 
-                "<a class='btn btn-danger btn-sm list-group-item-btn " +
-                (item._id) + "'" + " id = '" + (item._id) + "'" +
-                ">Delete</a>" +
-                "<li class='list-group-item " + (item._id) + "'" +
-                " id = '" + (item._id) + "'" + ">" +
-                "<strong>" + item.event + "</strong>" + "</strong>" + ' ~ ' +
-                moment(item.date).format("dddd, MMMM Do YYYY") +
-                ' ~ ' + "<strong><i>" + item.time + "</i></strong>" + "</li>"
+                listingLogic(item)
             )
 
         })
@@ -96,7 +112,7 @@ function Notify(eventObjects) {
 
         notifier.notify({
             title: "Notifyy",
-            message: (eventObjects.event),
+            message:  "It's "+ (eventObjects.event) + " time",
             wait: true
         })
 
@@ -136,16 +152,7 @@ $("#add-button").on("click", (e) => {
         eventData.insert(dateTimeArray, function (err, docs) {
 
 
-            let listing = (
-                "<a class='btn btn-danger btn-sm list-group-item-btn " +
-                (docs['0']._id) + "'" + " id = '" + (docs['0']._id) + "'" +
-                ">Delete</a>" +
-                "<li class='list-group-item " + (docs['0']._id) + "'" +
-                " id = '" + (docs['0']._id) + "'" + ">" +
-                "<strong>" + docs['0'].event + "</strong>" + "</strong>" + ' ~ ' +
-                moment(docs['0'].date).format("dddd, MMMM Do YYYY") +
-                ' ~ ' + "<strong><i>" + docs['0'].time + "</i></strong>" + "</li>"
-            )
+            let listing = listingLogic(docs['0'])
 
             $("<div />", {
                 class: "",
@@ -193,6 +200,17 @@ $("#event-list").on("click", "a", function () {
         })
     })
 })
+
+function listingLogic(docs) {
+    return ("<a class='btn btn-danger list-danger btn-sm list-group-item-btn " +
+        (docs._id) + "'" + " id = '" + (docs._id) + "'" +
+        ">Delete</a>" +
+        "<li class='list-group-item " + (docs._id) + "'" +
+        " id = '" + (docs._id) + "'" + ">" +
+        "<strong>" + docs.event + "</strong>" + "</strong>" + ' ~ ' +
+        moment(docs.date).format("dddd, MMMM Do YYYY") +
+        ' ~ ' + "<strong><i>" + docs.time + "</i></strong>" + "</li>");
+}
 
 function ConvertTo24(time) {
     let timeToArr = Array.from(time);

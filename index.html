@@ -1,61 +1,74 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Notifyy</title>
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"/>
-    <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"/>
-  <script type="text/javascript" src="./node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-  <link rel="stylesheet" href="./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-  <link rel="stylesheet" href="./node_modules/notyf/dist/notyf.min.css"/>
-  <link rel="stylesheet" href="./styles.css"/>
-  </head>
-  <body>
-    <div class="container">
-      <h1 class="notifyy"><small>Notifyy</small></h1>
-      <div class="row">          
-        <label for="remind-title">Event Title</label>
-        <input type="text" name="title" id="event-title" class="form-control" autofocus >
-      </div>
 
-      <div class="row" style="padding-top:10px;">
-        <div class="col-xs-6">
+<head>
+  <meta charset="UTF-8">
+  <title>Notifyy</title>
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js" />
+  <script type="text/javascript" src="./node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+  <link rel="stylesheet" href="./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"
+  />
+  <link rel="stylesheet" href="./node_modules/notyf/dist/notyf.min.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="notifyy">
+      <small>Notifyy</small>
+    </h1>
+    <div class="row">
+      <label for="remind-title">Event Title</label>
+      <input type="text" name="title" id="event-title" class="form-control" autofocus>
+    </div>
+
+    <div class="row" style="padding-top:10px;">
+      <div class="col-xs-6">
         <label for="date">Date</label>
         <div class="input-group date">
           <input type="text" class="form-control" id="date">
           <span class="input-group-addon">
             <i class="glyphicon glyphicon-calendar"></i>
-          </span>     
-        </div>
-        </div>
-
-
-          <div class="col-xs-6">
-          <label for="time">Time</label>
-            <div class="input-group time">
-                <input type="text" class="form-control" id="time">
-              <span class="input-group-addon">
-                <i class="glyphicon glyphicon-time"></i>
-              </span>
-            </div>              
+          </span>
         </div>
       </div>
 
-      <br/>
+
+      <div class="col-xs-6">
+        <label for="time">Time</label>
+        <div class="input-group time">
+          <input type="text" class="form-control" id="time">
+          <span class="input-group-addon">
+            <i class="glyphicon glyphicon-time"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <br/>
+    <div>
+      <button class="btn btn-success glyphicon glyphicon-refresh btn-md" id="refresh"></button>
+      <button class="btn btn-danger glyphicon glyphicon-remove btn-md" id="clear-all"></button>
+
       <button style="float:right;" class="btn btn-success btn-md" id="add-button">Add</button>
       <br/>
-      <div class="fadeIn row">
-            <label for="reminder-list">Upcoming Events</label>
-            <ul class=" list-group" id="event-list">             
-            </ul>    
-      </div>
-                    
-    </div>
-  </body>
 
-  <script src="./node_modules/notyf/dist/notyf.min.js"></script> 
-  <script>
-    // You can also require other files to run in this process
-    require('./renderer.js')
-  </script>
+    </div>
+
+    <div class="fadeIn row">
+      <label for="reminder-list">Upcoming Events</label>
+      <ul class=" list-group" id="event-list">
+      </ul>
+    </div>
+
+  </div>
+</body>
+
+<script src="./node_modules/notyf/dist/notyf.min.js"></script>
+<script>
+  // You can also require other files to run in this process
+  require('./renderer.js')
+</script>
+
 </html>
