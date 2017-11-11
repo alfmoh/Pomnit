@@ -111,7 +111,7 @@ function Notify(eventObjects) {
         });
 
         notifier.notify({
-            title: "Notifyy",
+            title: "Pomnit",
             message:  "It's "+ (eventObjects.event) + " time",
             wait: true
         })

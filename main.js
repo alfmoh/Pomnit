@@ -1,7 +1,7 @@
 const { BrowserWindow, app } = require("electron")
 const path = require("path")
 const url = require("url")
-const filename = app.getPath('userData') + "/Notifyy.db";
+const filename = app.getPath('userData') + "/Pomnit.db";
 
 
 var Datastore = require('nedb');
