@@ -4,13 +4,18 @@
   "description": "a desktop notification application",
   "main": "main.js",
   "scripts": {
-    "start": "./node_modules/.bin/electron ."
+    "start": "electron .",
+    "package": "",
+    "build": "electron-packager . Pomnit"
   },
   "author": "alfred mohenu",
   "license": "ISC",
   "devDependencies": {
+    "asar": "^0.14.0",
     "electron": "~1.6.2",
-    "electron-reload": "^1.2.1"
+    "electron-packager": "^9.1.0",
+    "electron-reload": "^1.2.1",
+    "electron-winstaller": "^2.6.3"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
@@ -22,5 +27,11 @@
     "nedb": "^1.8.0",
     "node-notifier": "^5.1.2",
     "notyf": "^2.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://alfq@bitbucket.org/alfq/pomnit.git"
+  },
+  "keywords": [],
+  "homepage": "https://bitbucket.org/alfq/pomnit#readme"
 }
