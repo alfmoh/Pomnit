@@ -1,3 +1,8 @@
+Windows version is available [here](https://drive.google.com/open?id=1e2WuvLU06vnzLtj3qEjzXCc-UR6k03WV) for download
+
+
+
+
 # electron-quick-start
 
 **Clone and run for a quick way to see Electron in action.**
